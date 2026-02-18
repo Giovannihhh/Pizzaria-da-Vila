@@ -108,7 +108,7 @@ export const MenuSection: React.FC = () => {
   ];
 
   const getCategoryIcon = (category: Category, isHighlight: boolean) => {
-    const className = `w-3 h-3 shrink-0 ${isHighlight ? 'text-brand-gold' : 'text-neutral-700'} group-hover:text-brand-gold transition-colors`;
+    const className = `w-4 h-4 shrink-0 ${isHighlight ? 'text-brand-gold' : 'text-neutral-700'} group-hover:text-brand-gold transition-colors`;
     if (category === 'salgadas' || category === 'doces') return <Pizza className={className} />;
     if (category === 'bebidas') return <Coffee className={className} />;
     if (category === 'acai' || category === 'sobremesas') return <IceCream className={className} />;
@@ -132,7 +132,7 @@ export const MenuSection: React.FC = () => {
        <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-10">
             <span className="text-brand-gold uppercase tracking-widest text-xs font-bold mb-2 block">Cardápio Completo</span>
-            <h2 className="font-serif text-3xl md:text-4xl text-white mb-4">Sabores da Vila</h2>
+            <h2 className="font-serif text-4xl md:text-5xl text-white mb-4">Sabores da Vila</h2>
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 mb-12">
@@ -140,9 +140,9 @@ export const MenuSection: React.FC = () => {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-3 md:px-5 py-2 text-[10px] md:text-xs uppercase tracking-widest transition-all border duration-300 rounded-full ${
+                className={`px-4 md:px-6 py-2.5 text-[11px] md:text-xs uppercase tracking-widest transition-all border duration-300 rounded-full ${
                   activeCategory === cat.id
-                    ? 'border-brand-gold bg-brand-gold text-brand-dark font-bold'
+                    ? 'border-brand-gold bg-brand-gold text-brand-dark font-black shadow-[0_0_15px_rgba(255,193,7,0.3)]'
                     : 'border-white/10 text-neutral-400 hover:border-brand-gold/50 bg-neutral-900/40'
                 }`}
               >
@@ -151,59 +151,74 @@ export const MenuSection: React.FC = () => {
             ))}
           </div>
 
-          {/* Optimized Grid Layout: 2 col mobile, 3 col tablet, 4 col desktop */}
-          <div ref={gridRef} className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+          {/* Grid responsiva otimizada: 1 coluna no mobile para evitar truncamento */}
+          <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {menuData[activeCategory].map((item, index) => (
               <div 
                 key={index} 
-                className={`group relative flex flex-col p-3 border rounded-xl overflow-hidden transition-all duration-300 ${item.isHighlight ? 'border-brand-gold/30 bg-brand-gold/5' : 'border-white/5 bg-neutral-900/60 hover:bg-neutral-800/80 hover:border-white/10'}`}
+                className={`group relative flex flex-col p-4 border rounded-2xl overflow-hidden transition-all duration-300 ${
+                  item.isHighlight 
+                  ? 'border-brand-gold/40 bg-brand-gold/[0.03]' 
+                  : 'border-white/5 bg-neutral-900/60 hover:bg-neutral-800/80 hover:border-white/20'
+                } shadow-lg`}
               >
-                <div className="flex gap-3 mb-2">
-                    <div className="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-lg overflow-hidden relative border border-white/5">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                        {item.isHighlight && <div className="absolute top-0 right-0 bg-brand-gold text-[8px] font-black text-black px-1 rounded-bl">★</div>}
+                <div className="flex gap-4 mb-4">
+                    <div className="w-20 h-20 md:w-24 md:h-24 shrink-0 rounded-xl overflow-hidden relative border border-white/10">
+                        <img 
+                          src={item.image} 
+                          alt={item.name} 
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                        />
+                        {item.isHighlight && (
+                          <div className="absolute top-0 right-0 bg-brand-gold text-[9px] font-black text-black px-1.5 py-0.5 rounded-bl-lg shadow-md flex items-center gap-1">
+                            <Star size={8} fill="currentColor" /> DESTAQUE
+                          </div>
+                        )}
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start gap-1">
-                            <h3 className={`font-serif text-sm md:text-base leading-tight truncate ${item.isHighlight ? 'text-brand-gold' : 'text-white'}`}>
+                    <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <div className="flex justify-between items-start gap-2 mb-1">
+                            <h3 className={`font-serif text-lg md:text-xl leading-tight ${item.isHighlight ? 'text-brand-gold' : 'text-white'}`}>
                                 {item.name}
                             </h3>
-                            {getCategoryIcon(activeCategory, item.isHighlight || false)}
+                            <div className="mt-1">{getCategoryIcon(activeCategory, item.isHighlight || false)}</div>
                         </div>
-                        <p className="text-neutral-500 text-[10px] line-clamp-2 mt-1 font-light leading-tight">
+                        <p className="text-neutral-500 text-xs font-light leading-snug line-clamp-3">
                             {item.description}
                         </p>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between mt-auto pt-2 border-t border-white/5">
-                     <span className="font-serif text-sm md:text-base text-brand-gold font-bold">{item.price}</span>
+                <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                     <div className="flex flex-col">
+                        <span className="text-neutral-500 text-[9px] uppercase tracking-widest font-bold">Valor</span>
+                        <span className="font-serif text-xl text-brand-gold font-bold">{item.price}</span>
+                     </div>
                      <button 
                        onClick={() => handleAddClick(item)}
-                       className={`flex items-center justify-center p-2 rounded-lg transition-all ${
+                       className={`flex items-center justify-center h-12 w-12 rounded-xl transition-all shadow-md active:scale-95 ${
                            addedItem === item.name 
                            ? 'bg-green-600 text-white' 
-                           : 'bg-white/5 hover:bg-brand-gold hover:text-black text-white'
+                           : 'bg-neutral-800 hover:bg-brand-gold hover:text-black text-white hover:shadow-brand-gold/20'
                        }`}
                        disabled={addedItem === item.name}
                      >
-                       {addedItem === item.name ? <Check size={14} /> : <Plus size={14} />}
+                       {addedItem === item.name ? <Check size={20} strokeWidth={3} /> : <Plus size={20} strokeWidth={3} />}
                      </button>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="text-center mt-12">
-             <p className="text-neutral-500 text-[10px] uppercase tracking-[0.2em] mb-4">Preços sujeitos a alteração sem aviso prévio</p>
+          <div className="text-center mt-16">
+             <p className="text-neutral-600 text-[10px] uppercase tracking-[0.3em] mb-4 font-bold">Experiência Gastronômica Inigualável</p>
              <a 
               href="https://www.byappfood.com/ordering/restaurant/menu?company_uid=a64182f8-bfd2-4ac6-b594-6d7c1a1e0bb8&restaurant_uid=04c495b9-ad76-46ec-b70a-7787369feb50&facebook=true" 
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block border-b border-brand-gold text-brand-gold pb-1 hover:text-white hover:border-white transition-all text-[10px] uppercase tracking-widest"
+              className="inline-flex items-center gap-2 border-b-2 border-brand-gold/50 text-brand-gold pb-1 hover:text-white hover:border-white transition-all text-xs font-black uppercase tracking-widest"
             >
-              Cardápio Oficial BYAPP →
+              Consultar Versão Digital Completa <Plus size={12} />
             </a>
           </div>
        </div>
